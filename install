@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Change the script to point to our install directory
+sed s,"^PRF=\"\${HOME}\/\.\"$","PRF=\"$PWD\/\"",g < bashrc_dispatch > bashrc_run
+if [ -f "$HOME/.bashrc" ] ; then
+	mv $HOME/.bashrc $PWD/`date +%Y%m%d`.bashrc 2>&-
+fi
+if [ -f "$HOME/.bash_profile" ] ; then
+	mv $HOME/.bash_profile $PWD/`date +%Y%m%d`.bash_profile 2>&-
+fi
+if [ -f "$HOME/.bash_login" ] ; then
+	mv $HOME/.bash_login $PWD/`date +%Y%m%d`.bash_login 2>&-
+fi
+if [ -f "$HOME/.profile" ] ; then
+	mv $HOME/.profile $PWD/`date +%Y%m%d`.profile 2>&-
+fi
+ln -s $PWD/bashrc_run $HOME/.bash_profile 2>&-
+ln -s $PWD/bashrc_run $HOME/.bashrc 2>&-
+ln -s $PWD/bashrc_run $HOME/.bash_login 2>&-
+#ln -s $PWD/.vimrc.local $HOME/.vimrc.local 2>&- #spf13-vim
+ln -s $PWD/.vimrc $HOME/.vimrc 2>&-
+echo "Don't do these things yet..."
+echo "git clone http://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle" # TODO
+echo "vim +BundleInstall" # TODO
+#vim -u ~/.vimrc +BundleInstall
