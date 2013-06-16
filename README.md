@@ -9,3 +9,4 @@
  * [rtomayko/dotfiles](https://github.com/rtomayko/dotfiles)
  * [mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)
  * [skwp/dotfiles](https://github.com/skwp/dotfiles)
+ * [holman/dotfiles](git://github.com/holman/dotfiles)
