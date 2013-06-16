@@ -13,12 +13,18 @@ fi
 if [ -f "$HOME/.profile" ] ; then
 	mv $HOME/.profile $PWD/`date +%Y%m%d`.profile 2>&-
 fi
+if [ -f "$HOME/.vim" ] ; then
+	mv $HOME/.vim $PWD/`date +%Y%m%d`.vim 2>&-
+fi
+if [ -f "$HOME/.vimrc" ] ; then
+	mv $HOME/.vimrc $PWD/`date +%Y%m%d`.vimrc 2>&-
+fi
 ln -s $PWD/bashrc_run $HOME/.bash_profile 2>&-
 ln -s $PWD/bashrc_run $HOME/.bashrc 2>&-
 ln -s $PWD/bashrc_run $HOME/.bash_login 2>&-
-#ln -s $PWD/.vimrc.local $HOME/.vimrc.local 2>&- #spf13-vim
 ln -s $PWD/.vimrc $HOME/.vimrc 2>&-
-echo "Don't do these things yet..."
-echo "git clone http://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle" # TODO
-echo "vim +BundleInstall" # TODO
-#vim -u ~/.vimrc +BundleInstall
+ln -s $PWD/.vim $HOME/.vim 2>&-
+#echo "Don't do these things yet..."
+#echo "git clone http://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle" # TODO
+#echo "vim +BundleInstall" # TODO
+vim -u ~/.vimrc +BundleInstall
