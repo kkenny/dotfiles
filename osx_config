@@ -1,5 +1,5 @@
 #!/bin/bash
-export MACHINE_NAME=aabelard
+export MACHINE_NAME=in3670
 
 # this came from https://github.com/mathiasbynens/dotfiles
 # http://mths.be/osx
