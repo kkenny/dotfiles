@@ -56,3 +56,5 @@ let colors_name = "aaron"
 :hi SpellErrors  guibg=red          guifg=white        ctermfg=7            ctermbg=1                     cterm=bold
 :hi NonText      guibg=black        guifg=#333333      ctermfg=235
 :hi SpecialKey   guibg=black        guifg=#333333      ctermfg=235
+:hi SignColumn   ctermbg=0
+:hi GitGutterChangeDelete ctermfg=1

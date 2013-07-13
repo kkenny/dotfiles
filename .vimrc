@@ -56,6 +56,7 @@ set shiftwidth=4
 " }
 
 " listchars
+"set listchars=tab:\┃\ ,eol:¬
 set listchars=tab:\┃\ ,eol:¬
 "set listchars=tab:\|\ ,eol:¬
 "set listchars=tab:\￨\ ,eol:¬
@@ -165,6 +166,10 @@ imap ^[[H ^Og0
 	
 	" vim-fugitive - git integration {
 		Bundle "tpope/vim-fugitive"	
+	" }
+	
+	" Git Gutter {
+		Bundle 'airblade/vim-gitgutter'	
 	" }
 	
 	" OmniComplete {
