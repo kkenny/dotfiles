@@ -1,6 +1,12 @@
 #!/bin/bash
 export MACHINE_NAME=in3670
 
+# Make airport command line tool easy to use
+sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport
+
+# Put event scripts directory in the right place
+ln -s ~/src/dotfiles/EventScripts ~/Library/Application\ Scripts/net.mousedown.EventScripts
+
 # this came from https://github.com/mathiasbynens/dotfiles
 # http://mths.be/osx
 

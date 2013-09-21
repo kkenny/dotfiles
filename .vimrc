@@ -225,5 +225,5 @@ imap ^[[H ^Og0
 		" Run this if things aren't right :PowerlineClearCache
 	" }
 	
-filetype plugin indent on       " Vundle Required -- presumably after Bundles are loaded?
+"filetype plugin indent on       " Vundle Required -- presumably after Bundles are loaded?
 " } end plugins
