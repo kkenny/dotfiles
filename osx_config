@@ -1,7 +1,7 @@
 #!/bin/bash
 
 EVENT_SCRIPTS_PATH="${HOME}/src/dotfiles/EventScripts"
-export MACHINE_NAME=$(/bin/hostname -s)
+export MY_HOSTNAME=$(/bin/hostname -s)
 
 # Make airport command line tool easy to use
 [[ -f "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport" ]] && \
@@ -31,10 +31,10 @@ sudo -v
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "$MACHINE_NAME"
-sudo scutil --set HostName "$MACHINE_NAME"
-sudo scutil --set LocalHostName "$MACHINE_NAME"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$MACHINE_NAME"
+sudo scutil --set ComputerName "$MY_HOSTNAME"
+sudo scutil --set HostName "$MY_HOSTNAME"
+sudo scutil --set LocalHostName "$MY_HOSTNAME"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$MY_HOSTNAME"
 
 # plugged in, sleep monitor at 1hr, machine at 3hr
 sudo pmset -c displaysleep 60
