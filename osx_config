@@ -1,6 +1,34 @@
 #!/bin/bash
 
+## Where is event scripts?
 EVENT_SCRIPTS_PATH="${HOME}/src/dotfiles/EventScripts"
+
+## Power Savings
+# Plugged in timeouts
+PLUGGED_IN_MONITOR_TIMEOUT="60" ## IN MINUTES
+PLUGGED_IN_SLEEP_TIMEOUT="180"	## IN MINUTES
+
+# Unplugged timouts
+UNPLUGGED_MONITOR_TIMEOUT="15"	## IN MINUTES
+UNPLUGGED_SLEEP_TIMEOUT="20"	## IN MINUTES
+
+# Dim the monitor when unplugged?
+DIM_MONITOR_WHEN_UNPLUGGED=1	## 1=true 2=false
+
+## Security
+# Re-auth filevault after standby?
+FILEVAULT_REAUTH=1		## 1=true 2=false
+
+## UI/UX
+ENABLE_MENUBAR_TRANSPARENCY=false
+SHOW_BATTERY_TIME="YES"
+SHOW_BATTERY_PERCENTAGE="YES"
+SHOW_BT_MENU=true
+SHOW_AIRPORT_MENU=true
+SHOW_BATTERY_MENU=true
+SHOW_CLOCK=true
+
+
 export MY_HOSTNAME=$(/bin/hostname -s)
 
 # Make airport command line tool easy to use
@@ -31,31 +59,37 @@ sudo -v
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "$MY_HOSTNAME"
-sudo scutil --set HostName "$MY_HOSTNAME"
-sudo scutil --set LocalHostName "$MY_HOSTNAME"
+sudo scutil --set ComputerName "${MY_HOSTNAME}"
+sudo scutil --set HostName "${MY_HOSTNAME}"
+sudo scutil --set LocalHostName "${MY_HOSTNAME}"
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$MY_HOSTNAME"
 
 # plugged in, sleep monitor at 1hr, machine at 3hr
-sudo pmset -c displaysleep 60
-sudo pmset -c sleep 180
+sudo pmset -c displaysleep $PLUGGED_IN_MONITOR_TIMEOUT
+sudo pmset -c sleep $PLUGGED_IN_SLEEP_TIMEOUT
 # unplugged sleep monitor at 4 minutes, machine at 8
-sudo pmset -b displaysleep 4
-sudo pmset -b sleep 8
+sudo pmset -b displaysleep $UNPLUGGED_MONITOR_TIMEOUT
+sudo pmset -b sleep $UNPLUGGED_SLEEP_TIMEOUT
 # Dim the monitor when going on battery
-sudo pmset -b lessbright 1
+sudo pmset -b lessbright $DIM_MONITOR_WHEN_UNPLUGGED
 # Make the user re-auth file vault on wake from standby
-sudo pmset -a destroyfvkeyonstandby 1
+sudo pmset -a destroyfvkeyonstandby $FILEVAULT_REAUTH
 
 # Menu bar: disable transparency
-defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
+defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool $ENABLE_MENUBAR_TRANSPARENCY
 
 #echo "Menu bar: show remaining battery time (on pre-10.8); hide percentage"
-defaults write com.apple.menuextra.battery ShowTime -string "YES"
-defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+defaults write com.apple.menuextra.battery ShowTime -string "${SHOW_BATTERY_TIME}"
+defaults write com.apple.menuextra.battery ShowPercent -string "${SHOW_BATTERY_PERCENTAGE}"
 
 # Menu bar: hide the useless Time Machine and Volume icons
-defaults write com.apple.systemuiserver menuExtras -array "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/AirPort.menu" "/System/Library/CoreServices/Menu Extras/Battery.menu" "/System/Library/CoreServices/Menu Extras/Clock.menu"
+## Build menu's to show
+[[ $SHOW_BT_MENU -eq true ]] && MENU="\"/System/Library/CoreServices/Menu Extras/Bluetooth.menu\""
+[[ $SHOW_AIRPORT_MENU -eq true ]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu Extras/AirPort.menu\""
+[[ $SHOW_BATTERY_MENU -eq true ]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu Extras/Battery.menu\""
+[[ $SHOW_CLOCK_MENU -eq true]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu Extras/Clock.menu\""
+
+defaults write com.apple.systemuiserver menuExtras -array $MENU
 
 # Set highlight color to orange
 defaults write NSGlobalDomain AppleHighlightColor -string '1 0.631372 0'
