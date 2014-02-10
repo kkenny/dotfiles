@@ -1,16 +1,26 @@
 #!/bin/bash
-export MACHINE_NAME=in3670
+
+EVENT_SCRIPTS_PATH="${HOME}/src/dotfiles/EventScripts"
+export MACHINE_NAME=$(/bin/hostname -s)
 
 # Make airport command line tool easy to use
+[[ -f "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport" ]] && \
 sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport
 
 # Put event scripts directory in the right place
-ln -s ~/src/dotfiles/EventScripts ~/Library/Application\ Scripts/net.mousedown.EventScripts
+if [[ -d $EVENT_SCRIPTS_PATH ]]
+  [[ ! -d ${HOME}/Library/Application\ Scripts ]] && mkdir -p ${HOME}/Library/Application\ Scripts
+  ln -s $EVENT_SCRIPTS_PATH ${HOME}/Library/Application\ Scripts/net.mousedown.EventScripts
+fi
 
 # this came from https://github.com/mathiasbynens/dotfiles
 # http://mths.be/osx
 
-# Ask for the administrator password upfront
+# Ask for the administrator password upfront and (hopefully) temporarily cache it
+#  If it won't cache, you could do something like:
+#  `read -s -p "Password for sudo: " sudo_pass`
+#  Then, when running sudo, do:
+#  `echo $sudo_pass | sudo -s command --with args`
 sudo -v
 
 # Keep-alive: update existing `sudo` time stamp until `.osx` has finished
@@ -26,7 +36,7 @@ sudo scutil --set HostName "$MACHINE_NAME"
 sudo scutil --set LocalHostName "$MACHINE_NAME"
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$MACHINE_NAME"
 
-# plugged in, sleep monitor at 1hr, machine at 3hr 
+# plugged in, sleep monitor at 1hr, machine at 3hr
 sudo pmset -c displaysleep 60
 sudo pmset -c sleep 180
 # unplugged sleep monitor at 4 minutes, machine at 8
