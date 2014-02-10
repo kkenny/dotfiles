@@ -48,7 +48,7 @@ export MY_HOSTNAME=$(/bin/hostname -s)
 sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport
 
 # Put event scripts directory in the right place
-if [[ -d $EVENT_SCRIPTS_PATH ]]
+if [[ -d $EVENT_SCRIPTS_PATH ]]; then
   [[ ! -d ${HOME}/Library/Application\ Scripts ]] && mkdir -p ${HOME}/Library/Application\ Scripts
   ln -s $EVENT_SCRIPTS_PATH ${HOME}/Library/Application\ Scripts/net.mousedown.EventScripts
 fi
@@ -71,10 +71,11 @@ sudo -v
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "${MY_HOSTNAME}"
-sudo scutil --set HostName "${MY_HOSTNAME}"
-sudo scutil --set LocalHostName "${MY_HOSTNAME}"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$MY_HOSTNAME"
+## ITHD DOESN'T LIKE THIS
+#sudo scutil --set ComputerName "${MY_HOSTNAME}"
+#sudo scutil --set HostName "${MY_HOSTNAME}"
+#sudo scutil --set LocalHostName "${MY_HOSTNAME}"
+#sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$MY_HOSTNAME"
 
 # plugged in, sleep monitor at 1hr, machine at 3hr
 sudo pmset -c displaysleep $PLUGGED_IN_MONITOR_TIMEOUT
@@ -96,10 +97,12 @@ defaults write com.apple.menuextra.battery ShowPercent -string "${SHOW_BATTERY_P
 
 # Menu bar: hide the useless Time Machine and Volume icons
 ## Build menu's to show
-[[ $SHOW_BT_MENU -eq true ]] && MENU="\"/System/Library/CoreServices/Menu Extras/Bluetooth.menu\""
-[[ $SHOW_AIRPORT_MENU -eq true ]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu Extras/AirPort.menu\""
-[[ $SHOW_BATTERY_MENU -eq true ]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu Extras/Battery.menu\""
-[[ $SHOW_CLOCK_MENU -eq true]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu Extras/Clock.menu\""
+#[[ $SHOW_BT_MENU == true ]] && MENU="\"/System/Library/CoreServices/Menu\ Extras/Bluetooth.menu\""
+#[[ $SHOW_AIRPORT_MENU == true ]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu\ Extras/AirPort.menu\""
+#[[ $SHOW_BATTERY_MENU == true ]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu\ Extras/Battery.menu\""
+#[[ $SHOW_CLOCK_MENU == true]] && MENU="${MENU}\ \"/System/Library/CoreServices/Menu\ Extras/Clock.menu\""
+### WELL, THAT DIDN'T WORK
+MENU='"/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/Battery.menu" "/System/Library/CoreServices/Menu Extras/Clock.menu"'
 
 defaults write com.apple.systemuiserver menuExtras -array $MENU
 
@@ -189,23 +192,23 @@ defaults write NSGlobalDomain AppleEnableSwipeNavigateWithScrolls -bool true
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.threeFingerHorizSwipeGesture -int 1
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
 
-echo Disable “natural” (Lion-style) scrolling
+echo 'Disable “natural” (Lion-style) scrolling'
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool $ENABLE_NATURAL_SCROLLING
 
 echo Increase sound quality for Bluetooth headphones/headsets
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
 echo Enable full keyboard access for all controls
-echo (e.g. enable Tab in modal dialogs)
+echo '(e.g. enable Tab in modal dialogs)'
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
 echo Enable access for assistive devices
 echo -n 'a' | sudo tee /private/var/db/.AccessibilityAPIEnabled > /dev/null 2>&1
 sudo chmod 444 /private/var/db/.AccessibilityAPIEnabled
-echo TODO: avoid GUI password prompt somehow (http://apple.stackexchange.com/q/60476/4408)
+echo 'TODO: avoid GUI password prompt somehow (http://apple.stackexchange.com/q/60476/4408)'
 #sudo osascript -e 'tell application "System Events" to set UI elements enabled to true'
 
-echo Use scroll gesture with the Ctrl (^) modifier key to zoom
+echo 'Use scroll gesture with the Ctrl (^) modifier key to zoom'
 defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
 echo Follow the keyboard focus while zoomed in
@@ -223,14 +226,14 @@ echo Turn off keyboard illumination when computer is not used for 5 minutes
 defaults write com.apple.BezelServices kDimTime -int 300
 
 echo Set language and text formats
-echo Note: if you’re in the US, replace `EUR` with `USD`, `Centimeters` with
-echo `Inches`, `en_GB` with `en_US`, and `true` with `false`.
+echo 'Note: if you’re in the US, replace `EUR` with `USD`, `Centimeters` with'
+echo '`Inches`, `en_GB` with `en_US`, and `true` with `false`.'
 defaults write NSGlobalDomain AppleLanguages -array "en"
 defaults write NSGlobalDomain AppleLocale -string "en_US@currency=USD"
 defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
 defaults write NSGlobalDomain AppleMetricUnits -bool true
 
-echo Set the timezone; see `systemsetup -listtimezones` for other values
+echo 'Set the timezone; see `systemsetup -listtimezones` for other values'
 systemsetup -settimezone "America/Indiana/Indianapolis" > /dev/null
 
 echo Disable auto-correct
@@ -248,7 +251,7 @@ echo Save screenshots to the desktop
 [[ ! -d "${SCREEN_SHOT_LOCATION}" ]] && mkdir -p ${SCREEN_SHOT_LOCATION}
 defaults write com.apple.screencapture location -string "${SCREEN_SHOT_LOCATION}"
 
-echo Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+echo 'Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)'
 defaults write com.apple.screencapture type -string "${SCREEN_SHOT_FORMAT}"
 
 echo Disable shadow in screenshots
@@ -257,32 +260,32 @@ defaults write com.apple.screencapture disable-shadow -bool true
 echo Enable subpixel font rendering on non-Apple LCDs
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
 
-echo Enable HiDPI display modes (requires restart)
+echo 'Enable HiDPI display modes (requires restart)'
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
 
 ###############################################################################
 echo Finder                                                                   #
 ###############################################################################
 
-echo Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
+echo 'Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons'
 defaults write com.apple.finder QuitMenuItem -bool true
 
-echo Finder: disable window animations and Get Info animations
+echo 'Finder: disable window animations and Get Info animations'
 defaults write com.apple.finder DisableAllAnimations -bool true
 
-echo Show icons for hard drives, servers, and removable media on the desktop
+echo 'Show icons for hard drives, servers, and removable media on the desktop'
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
-echo Finder: show hidden files by default
+echo 'Finder: show hidden files by default '
 #defaults write com.apple.finder AppleShowAllFiles -bool true
 
-echo Finder: show all filename extensions
+echo 'Finder: show all filename extensions'
 #defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
-echo Finder: show status bar
+echo 'Finder: show status bar'
 defaults write com.apple.finder ShowStatusBar -bool true
 
 echo Finder: show path bar
@@ -370,7 +373,7 @@ unset file
 echo Dock, Dashboard, and hot corners                                            #
 ###############################################################################
 
-echo Enable highlight hover effect for the grid view of a stack (Dock)
+echo 'Enable highlight hover effect for the grid view of a stack (Dock)'
 defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
 echo Set the icon size of Dock items to 36 pixels
@@ -382,22 +385,22 @@ defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
 echo Show indicator lights for open applications in the Dock
 defaults write com.apple.dock show-process-indicators -bool true
 
-echo Wipe all (default) app icons from the Dock
+echo 'Wipe all (default) app icons from the Dock'
 echo This is only really useful when setting up a new Mac, or if you don’t use
 echo the Dock to launch apps.
 #defaults write com.apple.dock persistent-apps -array
 
-echo Don’t animate opening applications from the Dock
+echo 'Don’t animate opening applications from the Dock'
 defaults write com.apple.dock launchanim -bool false
 
 echo Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.1
 
-echo Don’t group windows by application in Mission Control
-echo (i.e. use the old Exposé behavior instead)
+echo 'Don’t group windows by application in Mission Control'
+echo '(i.e. use the old Exposé behavior instead)'
 defaults write com.apple.dock expose-group-by-app -bool false
 
-echo Don’t show Dashboard as a Space
+echo 'Don’t show Dashboard as a Spacer'
 defaults write com.apple.dock dashboard-in-overlay -bool true
 
 echo Disable Dashboard
@@ -423,9 +426,9 @@ find ~/Library/Application\ Support/Dock -name "*.db" -maxdepth 1 -delete
 echo Add iOS Simulator to Launchpad
 ln -s /Applications/Xcode.app/Contents/Applications/iPhone\ Simulator.app /Applications/iOS\ Simulator.app
 
-echo Add a spacer to the left side of the Dock (where the applications are)
+echo 'Add a spacer to the left side of the Dock (where the applications are)'
 #defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
-echo Add a spacer to the right side of the Dock (where the Trash is)
+echo 'Add a spacer to the right side of the Dock (where the Trash is)'
 #defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="spacer-tile";}'
 
 echo Hot corners
@@ -457,10 +460,10 @@ defaults write com.apple.dock wvous-br-modifier -int 0
 echo Safari & WebKit                                                             #
 ###############################################################################
 
-echo Set Safari’s home page to `about:blank` for faster loading
+echo 'Set Safari’s home page to `about:blank` for faster loading'
 defaults write com.apple.Safari HomePage -string "about:blank"
 
-echo Prevent Safari from opening ‘safe’ files automatically after downloading
+echo 'Prevent Safari from opening ‘safe’ files automatically after downloading'
 defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 
 echo Allow hitting the Backspace key to go to the previous page in history
@@ -490,7 +493,7 @@ echo Add a context menu item for showing the Web Inspector in web views
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 ###############################################################################
-echo iTunes (pre-iTunes 11 only)                                                 #
+'echo iTunes (pre-iTunes 11 only)'
 ###############################################################################
 
 echo Disable the iTunes store link arrows
@@ -559,10 +562,10 @@ echo Address Book, Dashboard, iCal, TextEdit, and Disk Utility                  
 echo Enable the debug menu in Address Book
 defaults write com.apple.addressbook ABShowDebugMenu -bool true
 
-echo Enable Dashboard dev mode (allows keeping widgets on the desktop)
+echo 'Enable Dashboard dev mode (allows keeping widgets on the desktop)'
 defaults write com.apple.dashboard devmode -bool true
 
-echo Enable the debug menu in iCal (pre-10.8)
+echo 'Enable the debug menu in iCal (pre-10.8)'
 defaults write com.apple.iCal IncludeDebugMenu -bool true
 
 echo Use plain text mode for new TextEdit documents
