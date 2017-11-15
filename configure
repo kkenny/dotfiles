@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#Assumes git is installed
+
+rsync -azv ~/.vim ~/.vim_bak.$(date +%Y%m%d%H%M%S)
+rsync -azv ~/.vimrc ~/.vimrc.bak.$(date +%Y%m%d%H%M%S)
+rsync -azv ~/.tmux.conf ~/.tmux.bak.$(date +%Y%m%d%H%M%S)
+
+rm -f ~/.vimrc
+rm -rf ~/.vim
+rm -rf ~/.tmux.conf
+
+rsync -azv ./dot_vim/* ~/.vim/
+rsync -azv ./dot_vimrc ~/.vimrc
+rsync -azv ./dot_tmux.conf ~/.tmux.conf
+
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+vim +PluginInstall +qall
