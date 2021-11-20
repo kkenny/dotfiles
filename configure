@@ -41,9 +41,10 @@ rsync -azv ./dot_vim/* ~/.vim/
 
 for i in ".vimrc" ".tmux.conf" ".tmux.conf.local" ".zshrc" ".zshenv"; do
   [[ -f "${HOME}/${i}" ]] && rsync -azv ~/${i} ~/${i}.bak.$(date +%Y%m%d%H%M%S)
-  rm -f $i
+  rm -f ${HOME}/${i}
   rsync -azv ./${i} ${HOME}/${i}
 done
 
 _INSTALL_VUNDLE
 
+rsync -azv .vim/colors ${HOME}/.vim/

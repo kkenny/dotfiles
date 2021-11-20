@@ -161,9 +161,9 @@ highlight MatchParen ctermbg=4
 "{{{Look and Feel
 
 " Favorite Color Scheme
-colorscheme kameron
+colorscheme superman
 if has("gui_running")
-   colorscheme kameron
+   colorscheme superman
    " Remove Toolbar
    set guioptions-=T
    "Terminus is AWESOME
@@ -185,7 +185,7 @@ let themeindex=0
 function! RotateColorTheme()
    let y = -1
    while y == -1
-      let colorstring = "kameron#inkpot#ron#blue#elflord#evening#koehler#murphy#pablo#desert#torte#"
+      let colorstring = "superman#inkpot#ron#blue#elflord#evening#koehler#murphy#pablo#desert#torte#"
       let x = match( colorstring, "#", g:themeindex )
       let y = match( colorstring, "#", x + 1 )
       let g:themeindex = x + 1
