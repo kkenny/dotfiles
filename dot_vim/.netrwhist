@@ -1,5 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/Users/kameron.kenny/src/chef/os-cookbooks/sfmc_os_base/.kitchen'
-let g:netrw_dirhist_2='/Users/kameron.kenny/src/chef/os-cookbooks/microsoft_scx/attributes'
-let g:netrw_dirhist_3='/Users/kameron.kenny/src/chef/os-cookbooks/scripts/recipes'

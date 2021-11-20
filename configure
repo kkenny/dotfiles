@@ -1,19 +1,49 @@
 #!/bin/bash
 
+function _FAIL {
+  echo $1
+  exit $2
+}
+
+function _INSTALL_BREW {
+  echo "Installing brew from https://brew.sh... "
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  RC=$?
+  [[ $RC -eq 1 ]] && _FAIL "Could not install homebrew. \nHead to https://docs.brew.sh/installation for help." 2
+  echo "Done. \n"
+}
+
+function _INSTALL_GIT {
+  echo "Installing git... "
+  brew install git
+  echo "Done. \n"
+}
+
+function _INSTALL_VUNDLE {
+  echo "Installing and configuring Vundle"
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  vim +PluginInstall +qall
+  echo "Done. \n"
+}
+
+$(xcode-select -v) > /dev/null 2>&1 || _FAIL "xcode is not installed. You need to first install xcode, then run this script again." 1
+$(brew info) 2> /dev/null || _INSTALL_BREW
+$(git --version) 2> /dev/null || _INSTALL_GIT
+
+
+
+
 #Assumes git is installed
 
-rsync -azv ~/.vim ~/.vim_bak.$(date +%Y%m%d%H%M%S)
-rsync -azv ~/.vimrc ~/.vimrc.bak.$(date +%Y%m%d%H%M%S)
-rsync -azv ~/.tmux.conf ~/.tmux.bak.$(date +%Y%m%d%H%M%S)
-
-rm -f ~/.vimrc
+[[ -d "${HOME}/.vim" ]] && rsync -azv ~/.vim ~/.vim_bak.$(date +%Y%m%d%H%M%S)
 rm -rf ~/.vim
-rm -rf ~/.tmux.conf
-
 rsync -azv ./dot_vim/* ~/.vim/
-rsync -azv ./dot_vimrc ~/.vimrc
-rsync -azv ./dot_tmux.conf ~/.tmux.conf
 
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+for i in ".vimrc" ".tmux.conf" ".tmux.conf.local" ".zshrc" ".zshenv"; do
+  [[ -f "${HOME}/${i}" ]] && rsync -azv ~/${i} ~/${i}.bak.$(date +%Y%m%d%H%M%S)
+  rm -f $i
+  rsync -azv ./${i} ${HOME}/${i}
+done
 
-vim +PluginInstall +qall
+_INSTALL_VUNDLE
+
