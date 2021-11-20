@@ -26,9 +26,9 @@ function _INSTALL_VUNDLE {
   echo "Done. \n"
 }
 
-$(xcode-select -v) > /dev/null 2>&1 || _FAIL "xcode is not installed. You need to first install xcode, then run this script again." 1
-$(brew info) 2> /dev/null || _INSTALL_BREW
-$(git --version) 2> /dev/null || _INSTALL_GIT
+xcode-select -v > /dev/null 2>&1 || _FAIL "xcode is not installed. You need to first install xcode, then run this script again." 1
+brew info 2> /dev/null || _INSTALL_BREW
+git --version 2> /dev/null || _INSTALL_GIT
 
 
 
