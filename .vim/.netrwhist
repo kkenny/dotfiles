@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =0
+let g:netrw_dirhist_0='/Users/kameron.kenny/src/dotfiles/dot_vim'
+let g:netrw_dirhist_9='/Users/kameron.kenny/src/qmk/qmk_firmware/keyboards/darkstar'
+let g:netrw_dirhist_8='/Users/kameron.kenny/src/qmk/qmk_firmware/data/mappings'
+let g:netrw_dirhist_7='/Users/kameron.kenny/src/pd-client/cache'
+let g:netrw_dirhist_6='/Users/kameron.kenny/src'
+let g:netrw_dirhist_5='/Users/kameron.kenny/src/foo'
+let g:netrw_dirhist_4='/Users/kameron.kenny/src/gus-dev/config'
+let g:netrw_dirhist_3='/Users/kameron.kenny/src/gus-dev'
+let g:netrw_dirhist_2='/Users/kameron.kenny/src/gus-dev/config'
+let g:netrw_dirhist_1='/Users/kameron.kenny/src/gus-dev'
